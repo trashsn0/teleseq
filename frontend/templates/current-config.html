@@ -5,21 +5,22 @@
     <tbody>
       <tr>
         <th scope="row">Bot Token</th>
-        <td>Mark</td>
+        <td>{{bot_token}}</td>
        
       </tr>
       <tr>
         <th scope="row">Authorized Users</th>
-        <td>@fat</td>
-        <td>@yolo</td>
+        {% for user in authorized_users %}
+        <td>@{{user}}</td>
+        {% endfor %}
       </tr>
       <tr>
         <th scope="row">Absolute Path</th>
-        <td colspan="3">/Users/documents/logseq</td>
+        <td colspan="3">{{logseq_abs_path}}</td>
       </tr>
       <tr>
         <th scope="row">Polling</th>
-        <td>200s</td>
+        <td>{{polling_interval}}</td>
       </tr>
     </tbody>
   </table>
