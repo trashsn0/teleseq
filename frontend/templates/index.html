@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{%block content%}
+<!-- Page header with logo and tagline-->
+<header style="margin-bottom: 9px;"class="bg-light border-bottom">
+    <div class="container">
+
+        <div class="text-center" style="margin-top: 9px;padding-bottom: 0px;">
+            <h1 class="fw-bolder" >Welcome to TeleSeq!</h1>
+            <p class="lead mb-0">Your <u>telegram</u> bot for interacting with your <u>logseq</u> graph</p>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt=""  class="d-inline-block align-text-top">
+        </div>
+            
+    </div>
+</header>
+
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="small text-muted">Apply new configuration</div>
+                    <h2 class="card-title">New Configuration</h2> <br>
+
+                        {%include "new-config.html"%}
+                </div>
+            </div>
+           
+            
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Curent Config widget-->
+            <div class="card mb-4">
+                <div class="card-header">Current Configuration</div>
+                <div class="card-body">
+                    {%include "current-config.html"%}
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{%endblock%}
