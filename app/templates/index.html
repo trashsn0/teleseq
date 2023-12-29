@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
 {%block content%}
+
 <!-- Page header with logo and tagline-->
+
 <header style="margin-bottom: 9px;"class="bg-light border-bottom">
     <div class="container">
 
@@ -17,6 +19,8 @@
 <!-- Page content-->
 <div class="container">
     <div class="row">
+        
+        {% include "alerts.html" %}
         <!-- Blog entries-->
         <div class="col-lg-8">
             <!-- Featured blog post-->

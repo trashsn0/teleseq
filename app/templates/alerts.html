@@ -1,0 +1,18 @@
+
+{% if result["error"] %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Oups</strong> {{result["error"]}}.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% elif result["warning"] %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Carefull</strong> {{result["warning"]}}. Your bot will resume shortly.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% elif result["success"] %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>{{result["success"]}}</strong> Your bot will resume shortly.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
