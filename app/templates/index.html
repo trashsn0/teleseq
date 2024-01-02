@@ -19,10 +19,11 @@
 <!-- Page content-->
 <div class="container">
     <div class="row">
-        
+        {%if result%}
         {% include "alerts.html" %}
+        {%endif%}
         <!-- Blog entries-->
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <!-- Featured blog post-->
             <div class="card mb-4">
                 <div class="card-body">
@@ -30,18 +31,25 @@
                     <h2 class="card-title">New Configuration</h2> <br>
 
                         {%include "new-config.html"%}
+                        
                 </div>
             </div>
            
             
         </div>
         <!-- Side widgets-->
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <!-- Curent Config widget-->
             <div class="card mb-4">
-                <div class="card-header">Current Configuration</div>
                 <div class="card-body">
+                    <div class="small text-muted text-end">View your saved settings</div>
+                    <h2 class="card-title text-end">Current Configuration</h2> <br>
                     {%include "current-config.html"%}
+                    <br>
+                    {%if bot_token%}
+                        <button type="button" class="btn btn-danger">Stop Bot →</button>
+                        <button type="button" class="btn btn-warning">Restart →</button>
+                    {%endif%}
                 </div>
             </div>
             
