@@ -46,10 +46,17 @@
                     <h2 class="card-title text-end">Current Configuration</h2> <br>
                     {%include "current-config.html"%}
                     <br>
+                    <form action="/" method="POST">
                     {%if bot_token%}
-                        <button type="button" class="btn btn-danger">Stop Bot →</button>
-                        <button type="button" class="btn btn-warning">Restart →</button>
+                        {%if state=='running'%}
+                        <input type="submit" name ="stop" class="btn btn-danger" value="Stop Bot →">
+                        {%elif state=='stopped'%}
+                        <input type="submit" name="start" class="btn btn-success" value="Start Bot →">
+                        {%endif%}
+                        <input type="submit" name="restart" class="btn btn-warning" value="Restart →">
                     {%endif%}
+                    </form>
+                   
                 </div>
             </div>
             
