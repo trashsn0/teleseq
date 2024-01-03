@@ -17,7 +17,7 @@ STOP_FLAG_PATH = '/tmp/bot_stop_flag'
 def getConfig():
     global bot_token, logseq_abs_path, polling_interval, authorized_users, public
 
-    flask_url = os.environ.get('FLASK_URL', 'http://localhost:8888')
+    flask_url = os.environ.get('FLASK_URL', 'http://localhost:7575')
     response = requests.get(f'{flask_url}/get_config')
     config = response.json()
 

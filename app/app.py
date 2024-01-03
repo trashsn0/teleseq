@@ -1,8 +1,16 @@
 import subprocess
+import atexit
 import os
 import signal
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+
+
+##################################################### GRACEFULL EXIT #####################################################
+def cleanup() :
+    stop_bot()
+
+atexit.register(cleanup)
 
 ##################################################### FLASK AND DATABASE #################################################
 
@@ -33,14 +41,27 @@ def start_bot():
         return 'Bot is already running'
 
 def stop_bot():
-    bot_config = BotConfig.query.first()
-    if bot_config.bot_state == 'running':
-        os.kill(bot_config.bot_pid, signal.SIGTERM)
-        bot_config.bot_state = 'stopped'
-        db.session.commit()
-        return 'Bot stopped'
-    else:
-        return 'Bot is not running'
+    with app.app_context() :
+        bot_config = BotConfig.query.first()
+        if not bot_config :
+            return 'Configuration not found'
+        if bot_config.bot_state == 'running':
+
+            try :
+                os.kill(bot_config.bot_pid, signal.SIGTERM)
+                bot_config.bot_state = 'stopped'
+                bot_config.bot_pid = None
+                db.session.commit()
+                return 'Bot stopped'
+            except Exception as e :
+                bot_config.bot_state = 'stopped'
+                bot_config.bot_pid = None
+                db.session.commit()
+                print ("STOP CANCEL WROTE TO DB")
+                return 'Bot stopped'
+            
+        else:
+            return 'Bot is not running'
 
 def bot_state():
     bot_config = BotConfig.query.first()
@@ -110,16 +131,12 @@ def home():
         elif "stop" in request.form :
             stop_bot()
             success = "Your bot is stopping..."
-        elif "restart" in request.form :
-            stop_bot()
-            start_bot()
-            success="Yout bot is restarting..."
 
 
     config = BotConfig.query.first()
     result = {"error":error,"warning":warning,"success":success}
 
-    if config :        
+    if config :
         return render_template('index.html',page1=True, bot_token=config.bot_token, authorized_users=config.authorized_users.split(','), logseq_abs_path=config.logseq_abs_path, state=config.bot_state, result=result)
     else:
         return render_template('index.html',page1=True,result=result)
@@ -133,9 +150,16 @@ def howto() :
     return render_template('howto.html',page2=True)
 
 
-#################################################### CONTROLLER #########################################################
+#################################################### MAIN INTERFACE #########################################################
 
-if __name__ == "__main__":
-    with app.app_context() :
-        db.create_all()
-    app.run(port=8888,debug=True)
+def main() :
+    try :
+        with app.app_context() :
+            db.create_all()
+        app.run(debug=True,port=7575)
+    except KeyboardInterrupt :
+        stop_bot()
+
+
+if __name__ == "__main__":  
+    main()
