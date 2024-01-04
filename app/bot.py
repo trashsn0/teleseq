@@ -1,8 +1,7 @@
 import logging
 from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
-
-import time
+import postage
 import requests
 import os
 
@@ -66,13 +65,16 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         return
     await update.message.reply_text("Here are the available commands ∴ :\n\n - /log for adding under #log \n - Regular messages : new block in daily")
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def post(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
     user = update.effective_user
     # Check if the username is allowed
     if not public and user.username not in authorized_users:
         return
-    await update.message.reply_text(update.message.text)
+    
+    result = postage.newBlock(postage.getTodayJournalPath(logseq_abs_path),update.message.text_markdown)
+    await update.message.reply_text(result)
+    
 
 def rebuild() -> None:
     """Start the bot."""
@@ -87,7 +89,7 @@ def rebuild() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     # on non command i.e message - echo the message on Telegram
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, post))
 
 
     application.run_polling(allowed_updates=Update.ALL_TYPES)
